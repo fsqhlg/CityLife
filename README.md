@@ -180,8 +180,10 @@ source src/main/resources/db/migration/V2__seckill_consistency.sql;
 
 ### 6.3 Redis
 
+按本地 `redis.conf` 启动 Redis，并确认设置了 `requirepass`：
+
 ```bash
-redis-server.exe redis-test.conf
+redis-server.exe redis.conf
 redis-cli.exe -a "$REDIS_PASSWORD" ping
 ```
 
@@ -189,13 +191,13 @@ redis-cli.exe -a "$REDIS_PASSWORD" ping
 
 ### 6.4 RocketMQ
 
-本地 RocketMQ 4.9.8 目录示例：`D:\Downloads\rocketmq-all-4.9.8-bin-release`。
+将仓库中的 `deploy/rocketmq/broker-citylife.conf` 复制到 RocketMQ 的 `conf` 目录后启动：
 
 ```bash
 # 1. 启动 NameServer
 mqnamesrv.cmd
 
-# 2. 启动 Broker（broker-citylife.conf 里 namesrvAddr=127.0.0.1:9876）
+# 2. 启动 Broker（示例配置里 namesrvAddr=127.0.0.1:9876）
 mqbroker.cmd -c conf\broker-citylife.conf
 
 # 3. 创建秒杀 topic（4 读 4 写）
@@ -207,7 +209,7 @@ Windows + JDK 17/21 运行 RocketMQ 4.9.8 时，需要把 `runserver.cmd` / `run
 ### 6.5 启动应用
 
 ```bash
-mvn -s .vscode/mvn-settings.xml -DskipTests clean package
+mvn -DskipTests clean package
 java -Dfile.encoding=UTF-8 -jar target/hm-dianping-0.0.1-SNAPSHOT.jar
 ```
 
